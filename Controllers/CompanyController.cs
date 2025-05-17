@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using OtobusBiletiApp.Models;
 using OtobusBiletiApp.Dtos;
+using System.Linq;
 
 namespace OtobusBiletiApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CompanyController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -25,12 +26,13 @@ namespace OtobusBiletiApp.Controllers
                     company_id = c.company_id,
                     c_name = c.c_name,
                     c_telno = c.c_telno
-                }).ToList();
+                })
+                .ToList();
 
             return Ok(companies);
         }
 
-        // Tek firma getir (DTO)
+        // ID'ye göre firma getir (DTO)
         [HttpGet("getById/{id}")]
         public IActionResult GetCompany(int id)
         {
@@ -41,7 +43,8 @@ namespace OtobusBiletiApp.Controllers
                     company_id = c.company_id,
                     c_name = c.c_name,
                     c_telno = c.c_telno
-                }).FirstOrDefault();
+                })
+                .FirstOrDefault();
 
             if (company == null)
                 return NotFound();
@@ -49,8 +52,7 @@ namespace OtobusBiletiApp.Controllers
             return Ok(company);
         }
 
-        // Yeni firma ekle (DTO ile)
-        
+        // Yeni firma ekle (DTO)
         [HttpPost("postFirma")]
         public IActionResult AddCompany([FromBody] BusCompanyDto dto)
         {
@@ -67,8 +69,7 @@ namespace OtobusBiletiApp.Controllers
             return Ok(dto);
         }
 
-        // Firma güncelle (DTO ile)
-        
+        // Firma güncelle (DTO)
         [HttpPut("updateFirmabyId/{id}")]
         public IActionResult UpdateCompany(int id, [FromBody] BusCompanyDto updated)
         {
@@ -84,7 +85,6 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Firma sil
-        
         [HttpDelete("deleteFirmaById/{id}")]
         public IActionResult DeleteCompany(int id)
         {

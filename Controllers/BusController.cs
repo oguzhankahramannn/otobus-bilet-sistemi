@@ -5,7 +5,8 @@ using OtobusBiletiApp.Dtos;
 namespace OtobusBiletiApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    //[Route("[controller]")]
     public class BusController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -52,6 +53,7 @@ namespace OtobusBiletiApp.Controllers
 
             return Ok(bus);
         }
+        
 
         // Yeni otobüs ekle
         [HttpPost("addBus")]
@@ -72,19 +74,21 @@ namespace OtobusBiletiApp.Controllers
 
         // Otobüs güncelle
         [HttpPut("updateByPlaka")]
-        public IActionResult Update(string plaka, [FromBody] BusDto updated)
+        public IActionResult UpdateBusByPlaka([FromQuery] string plaka, [FromBody] Bus updatedBus)
         {
             var bus = _context.Buses.FirstOrDefault(b => b.b_plaka == plaka);
             if (bus == null)
                 return NotFound();
 
-            bus.model = updated.model;
-            bus.seat_capacity = updated.seat_capacity;
-            bus.company_id = updated.company_id;
+            // Alanları güncelle
+            bus.model = updatedBus.model;
+            //bus.seat_count = updatedBus.seat_count;
+            bus.company_id = updatedBus.company_id;
 
             _context.SaveChanges();
-            return Ok(updated);
+            return Ok(bus);
         }
+
 
         // Otobüs sil
         [HttpDelete("deleteByPlaka")]

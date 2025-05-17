@@ -15,7 +15,7 @@ namespace OtobusBiletiApp.Controllers
             _context = context;
         }
 
-        
+
         [HttpGet("getTicket")]
         public IActionResult GetAll()
         {
@@ -32,7 +32,7 @@ namespace OtobusBiletiApp.Controllers
             return Ok(tickets);
         }
 
-        
+
         [HttpGet("getTicketByPNR/{pnr}")]
         public IActionResult Get(int pnr)
         {
@@ -53,7 +53,7 @@ namespace OtobusBiletiApp.Controllers
             return Ok(ticket);
         }
 
-      
+
         [HttpPost("postTicket")]
         public IActionResult Add([FromBody] TicketDto dto)
         {
@@ -71,7 +71,7 @@ namespace OtobusBiletiApp.Controllers
             return Ok(dto);
         }
 
-     
+
         [HttpPut("putTicketByPNR/{pnr}")]
         public IActionResult Update(int pnr, [FromBody] TicketDto updated)
         {

@@ -1,5 +1,3 @@
-// DTO klasörü altında olması gereken tüm DTO'lar
-
 namespace OtobusBiletiApp.Dtos
 {
     public class PersonDto
@@ -8,13 +6,19 @@ namespace OtobusBiletiApp.Dtos
         public string name { get; set; }
         public string surname { get; set; }
         public string email { get; set; }
-
         public string password { get; set; }
     }
 
     public class AdminDto
     {
         public int p_id { get; set; }
+    }
+
+    public class PassengerDto
+    {
+        public int p_id { get; set; }
+        public string gender { get; set; }
+        public string tel_no { get; set; }
     }
 
     public class BusDto

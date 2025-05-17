@@ -2,22 +2,35 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using OtobusBiletiApp.Services;
 using OtobusBiletiApp;
+using OtobusBiletiApp.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// appsettings.json'dan bağlantı cümlesini al
+// 🔗 Veritabanı bağlantısı
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// DI container'a servisleri ekle
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 
+// 🔐 CORS politikası (Frontend erişimi için)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://127.0.0.1:5504") // Veya http://localhost:5504
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Bu önemli
+    });
+});
+
+// 🔧 Controller ve servisler
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+//  Swagger + JWT desteği
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Otobüs Bileti API", Version = "v1" });
@@ -50,7 +63,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// JWT Authentication yapılandırması
+// 🔐 JWT ayarları
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -67,17 +80,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddDbContext<AppDbContext>();
+// 🧩 Custom servisler
 builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 
-// Swagger devreye alınır
+// ✅Middleware sırası çok önemli
+app.UseCors("AllowFrontend"); // İlk önce CORS
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication(); // sonra kimlik doğrulama
 app.UseAuthorization();
 
 app.MapControllers();
