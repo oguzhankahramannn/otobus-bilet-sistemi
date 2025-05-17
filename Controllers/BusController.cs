@@ -16,7 +16,7 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Tüm otobüsleri getir
-        [HttpGet("getallbus")]
+        [HttpGet("getAllBus")]
         public IActionResult GetAll()
         {
             var buses = _context.Buses
@@ -33,7 +33,7 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Tek otobüs getir
-        [HttpGet("{plaka}")]
+        [HttpGet("getBusByPlaka/{plaka}")]
         public IActionResult Get(string plaka)
         {
             var bus = _context.Buses
@@ -54,7 +54,7 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Yeni otobüs ekle
-        [HttpPost("addbus")]
+        [HttpPost("addBus")]
         public IActionResult Add([FromBody] BusDto dto)
         {
             var bus = new Bus
@@ -71,7 +71,7 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Otobüs güncelle
-        [HttpPut("{plaka}")]
+        [HttpPut("updateByPlaka")]
         public IActionResult Update(string plaka, [FromBody] BusDto updated)
         {
             var bus = _context.Buses.FirstOrDefault(b => b.b_plaka == plaka);
@@ -87,7 +87,7 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Otobüs sil
-        [HttpDelete("{plaka}")]
+        [HttpDelete("deleteByPlaka")]
         public IActionResult Delete(string plaka)
         {
             var bus = _context.Buses.FirstOrDefault(b => b.b_plaka == plaka);

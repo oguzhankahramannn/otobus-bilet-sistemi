@@ -14,5 +14,7 @@ namespace OtobusBiletiApp.Models
 
         [ForeignKey("b_plaka")]
         public Bus Bus { get; set; }
+
+        
     }
 }

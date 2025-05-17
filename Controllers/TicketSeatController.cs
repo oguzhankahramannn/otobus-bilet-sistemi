@@ -15,7 +15,8 @@ namespace OtobusBiletiApp.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        
+        [HttpGet("getTicketSeat")]
         public IActionResult GetAll()
         {
             var result = _context.TicketSeats
@@ -31,7 +32,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        
+        [HttpGet("getTicketSeatbyId/{id}")]
         public IActionResult Get(int id)
         {
             var item = _context.TicketSeats
@@ -51,7 +53,9 @@ namespace OtobusBiletiApp.Controllers
             return Ok(item);
         }
 
-        [HttpPost]
+        
+        [HttpPost("postTicketSeat")]
+
         public IActionResult Add([FromBody] TicketSeatDto dto)
         {
             var model = new TicketSeat
@@ -68,7 +72,9 @@ namespace OtobusBiletiApp.Controllers
             return Ok(dto);
         }
 
-        [HttpPut("{id}")]
+        
+        [HttpPut("getPutTicketSeatbyId/{id}")]
+
         public IActionResult Update(int id, [FromBody] TicketSeatDto dto)
         {
             var model = _context.TicketSeats.FirstOrDefault(ts => ts.id == id);
@@ -83,7 +89,9 @@ namespace OtobusBiletiApp.Controllers
             return Ok(dto);
         }
 
-        [HttpDelete("{id}")]
+     
+        [HttpDelete("deleteTicketbyId/{id}")]
+
         public IActionResult Delete(int id)
         {
             var model = _context.TicketSeats.FirstOrDefault(ts => ts.id == id);

@@ -16,14 +16,9 @@ namespace OtobusBiletiApp.Controllers
             _context = context;
         }
 
-        [Authorize]
-        [HttpGet("gizli")]
-        public IActionResult GizliBilgiler()
-        {
-            return Ok("Bu JWT ile erişilebilen gizli bir endpointtir.");
-        }
 
-        [HttpGet("getall")]
+
+        [HttpGet("getallPerson")]
         public IActionResult GetAll()
         {
             var persons = _context.Persons
@@ -38,7 +33,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(persons);
         }
 
-        [HttpGet("{id}")]
+
+        [HttpGet("personWithId/{id}")]
         public IActionResult Get(int id)
         {
             var person = _context.Persons
@@ -58,40 +54,53 @@ namespace OtobusBiletiApp.Controllers
             return Ok(person);
         }
 
-        [HttpPost]
+
+        [HttpPost("postPerson")]
         public IActionResult Add([FromBody] PersonDto dto)
         {
             var person = new Person
             {
+                p_id = dto.p_id,
                 name = dto.name,
                 surname = dto.surname,
                 email = dto.email,
-                password = "default123"
+                password = dto.password
             };
 
             _context.Persons.Add(person);
             _context.SaveChanges();
-
-            dto.p_id = person.p_id;
             return Ok(dto);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("personPutWithId/{id}")]
         public IActionResult Update(int id, [FromBody] PersonDto updated)
         {
             var person = _context.Persons.FirstOrDefault(p => p.p_id == id);
             if (person == null)
-                return NotFound();
+                return NotFound(new { message = $"ID {id} ile kayıt bulunamadı." });
 
+            // Güncelleme
             person.name = updated.name;
             person.surname = updated.surname;
             person.email = updated.email;
 
             _context.SaveChanges();
-            return Ok(updated);
+
+            return Ok(new
+            {
+                message = "Kayıt başarıyla güncellendi.",
+                updated = new
+                {
+                    id = id,
+                    updated.name,
+                    updated.surname,
+                    updated.email
+                }
+            });
         }
 
-        [HttpDelete("{id}")]
+
+        [HttpDelete("personDeleteWith/{id}")]
         public IActionResult Delete(int id)
         {
             var person = _context.Persons.FirstOrDefault(p => p.p_id == id);

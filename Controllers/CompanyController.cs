@@ -16,7 +16,7 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Tüm firmaları getir (DTO)
-        [HttpGet]
+        [HttpGet("getAllFirma")]
         public IActionResult GetAllCompanies()
         {
             var companies = _context.Companies
@@ -31,7 +31,7 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Tek firma getir (DTO)
-        [HttpGet("{id}")]
+        [HttpGet("getById/{id}")]
         public IActionResult GetCompany(int id)
         {
             var company = _context.Companies
@@ -50,7 +50,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Yeni firma ekle (DTO ile)
-        [HttpPost]
+        
+        [HttpPost("postFirma")]
         public IActionResult AddCompany([FromBody] BusCompanyDto dto)
         {
             var company = new BusCompany
@@ -67,7 +68,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Firma güncelle (DTO ile)
-        [HttpPut("{id}")]
+        
+        [HttpPut("updateFirmabyId/{id}")]
         public IActionResult UpdateCompany(int id, [FromBody] BusCompanyDto updated)
         {
             var company = _context.Companies.FirstOrDefault(c => c.company_id == id);
@@ -82,7 +84,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Firma sil
-        [HttpDelete("{id}")]
+        
+        [HttpDelete("deleteFirmaById/{id}")]
         public IActionResult DeleteCompany(int id)
         {
             var company = _context.Companies.FirstOrDefault(c => c.company_id == id);

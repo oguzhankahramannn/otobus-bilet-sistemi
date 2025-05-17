@@ -16,7 +16,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Tüm ödemeleri getir (DTO)
-        [HttpGet]
+        
+        [HttpGet("getPayment")]
         public IActionResult GetAll()
         {
             var payments = _context.Payments
@@ -29,8 +30,9 @@ namespace OtobusBiletiApp.Controllers
             return Ok(payments);
         }
 
-        // Tek ödeme getir (DTO)
-        [HttpGet("{id}")]
+        
+        
+        [HttpGet("getPaymentById/{id}")]
         public IActionResult Get(int id)
         {
             var payment = _context.Payments
@@ -48,7 +50,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Yeni ödeme ekle (DTO ile)
-        [HttpPost]
+        
+        [HttpPost("postPayment")]
         public IActionResult Add([FromBody] PaymentDto dto)
         {
             var payment = new PaymentProcessing
@@ -66,7 +69,9 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Ödeme güncelle (DTO ile)
-        [HttpPut("{id}")]
+        
+        [HttpPut("putPaymentById/{id}")]
+
         public IActionResult Update(int id, [FromBody] PaymentDto updated)
         {
             var payment = _context.Payments.FirstOrDefault(p => p.payment_id == id);
@@ -79,7 +84,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Ödeme sil
-        [HttpDelete("{id}")]
+      
+        [HttpDelete("deletePaymentById/{id}")]
         public IActionResult Delete(int id)
         {
             var payment = _context.Payments.FirstOrDefault(p => p.payment_id == id);

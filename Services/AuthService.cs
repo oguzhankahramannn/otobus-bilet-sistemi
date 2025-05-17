@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OtobusBiletiApp.Dtos;
@@ -21,38 +22,47 @@ namespace OtobusBiletiApp.Services
 
         public async Task<AuthResponse> Login(LoginUser loginUser)
         {
-            var user = _context.Persons.FirstOrDefault(x => x.name == loginUser.name && x.password == loginUser.passwordHash);
-            if (user == null)
-                return new AuthResponse();
+            var user = await _context.Persons
+                .Where(x => x.name == loginUser.name && x.password == loginUser.password)
+                .FirstOrDefaultAsync();
 
-            var token = GenerateJwtToken(user);
-            return new AuthResponse
+            if (user == null)
             {
-                Id = user.p_id,
-                Username = user.name,
-                Token = token
-            };
+                //throw new ApplicationException("Kullanıcı adı Hatalı");
+                   return null;
+            }
+            else
+            {
+                var token = await GenerateJwtToken(user);
+                var authResponse = new AuthResponse
+                {
+                    Id = user.p_id,
+                    Token = token,
+                    Username = user.name,
+                };
+                return authResponse;
+            }
         }
 
-        private string GenerateJwtToken(Person user)
+
+        public async Task<string> GenerateJwtToken(Person person)
         {
-            var claims = new[]
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                new Claim(ClaimTypes.NameIdentifier, user.p_id.ToString()),
-                new Claim(ClaimTypes.Name, user.name)
+                Subject = new ClaimsIdentity(new Claim[]{
+                    new Claim(ClaimTypes.NameIdentifier, person.p_id.ToString()),
+
+                }),
+                Expires = DateTime.UtcNow.AddHours(6),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"]
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

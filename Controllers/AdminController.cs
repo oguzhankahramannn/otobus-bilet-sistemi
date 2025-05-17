@@ -79,4 +79,4 @@ namespace OtobusBiletiApp.Controllers
             return NoContent();
         }
     }
-}
+} 

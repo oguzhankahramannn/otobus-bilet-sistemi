@@ -15,7 +15,8 @@ namespace OtobusBiletiApp.Controllers
             _context = context;
         }
 
-        [HttpGet]
+       
+        [HttpGet("getTrip")]
         public IActionResult GetAll()
         {
             var trips = _context.Trips
@@ -35,7 +36,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(trips);
         }
 
-        [HttpGet("{id}")]
+ 
+        [HttpGet("getTripbyId/{id}")]
         public IActionResult Get(int id)
         {
             var trip = _context.Trips
@@ -59,7 +61,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(trip);
         }
 
-        [HttpPost]
+        
+        [HttpPost("postTrip")]
         public IActionResult Add([FromBody] TripDto dto)
         {
             var trip = new Trip
@@ -80,7 +83,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(dto);
         }
 
-        [HttpPut("{id}")]
+     
+        [HttpPut("putTripById/{id}")]
         public IActionResult Update(int id, [FromBody] TripDto updated)
         {
             var trip = _context.Trips.FirstOrDefault(t => t.trip_id == id);
@@ -99,7 +103,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(updated);
         }
 
-        [HttpDelete("{id}")]
+   
+        [HttpDelete("deleteTripbyId/{id}")]
         public IActionResult Delete(int id)
         {
             var trip = _context.Trips.FirstOrDefault(t => t.trip_id == id);

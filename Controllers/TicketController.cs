@@ -15,7 +15,8 @@ namespace OtobusBiletiApp.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        
+        [HttpGet("getTicket")]
         public IActionResult GetAll()
         {
             var tickets = _context.Tickets
@@ -31,7 +32,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(tickets);
         }
 
-        [HttpGet("{pnr}")]
+        
+        [HttpGet("getTicketByPNR/{pnr}")]
         public IActionResult Get(int pnr)
         {
             var ticket = _context.Tickets
@@ -51,7 +53,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(ticket);
         }
 
-        [HttpPost]
+      
+        [HttpPost("postTicket")]
         public IActionResult Add([FromBody] TicketDto dto)
         {
             var ticket = new Ticket
@@ -68,7 +71,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(dto);
         }
 
-        [HttpPut("{pnr}")]
+     
+        [HttpPut("putTicketByPNR/{pnr}")]
         public IActionResult Update(int pnr, [FromBody] TicketDto updated)
         {
             var ticket = _context.Tickets.FirstOrDefault(t => t.PNR_NO == pnr);
@@ -83,7 +87,7 @@ namespace OtobusBiletiApp.Controllers
             return Ok(updated);
         }
 
-        [HttpDelete("{pnr}")]
+        [HttpDelete("deleteTicketByPNR/{pnr}")]
         public IActionResult Delete(int pnr)
         {
             var ticket = _context.Tickets.FirstOrDefault(t => t.PNR_NO == pnr);

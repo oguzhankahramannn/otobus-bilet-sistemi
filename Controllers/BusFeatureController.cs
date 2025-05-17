@@ -16,41 +16,34 @@ namespace OtobusBiletiApp.Controllers
             _context = context;
         }
 
-        // Tüm otobüs özelliklerini getir (DTO ile)
-        [HttpGet]
-        public IActionResult GetAll()
+        // Belirli bir plakaya ait otobüs özelliklerini getir
+        [HttpGet("getByPlaka/{plaka}")]
+        public IActionResult GetByPlaka(string plaka)
         {
             var features = _context.BusFeatures
-                .Select(f => new BusFeatureDto
-                {
-                    b_plaka = f.b_plaka,
-                    feature_name = f.feature_name
-                }).ToList();
-
-            return Ok(features);
-        }
-
-        // Tek özellik getir (b_plaka + feature_name)
-        [HttpGet("{plaka}/{feature}")]
-        public IActionResult Get(string plaka, string feature)
-        {
-            var item = _context.BusFeatures
-                .Where(f => f.b_plaka == plaka && f.feature_name == feature)
+                .Where(f => f.b_plaka == plaka)
                 .Select(f => new BusFeatureDto
                 {
                     b_plaka = f.b_plaka,
                     feature_name = f.feature_name
                 })
-                .FirstOrDefault();
+                .ToList();
 
-            if (item == null)
-                return NotFound();
+            if (features == null || features.Count == 0)
+            {
+                return NotFound($"'{plaka}' plakalı otobüse ait özellik bulunamadı.");
+            }
 
-            return Ok(item);
+            return Ok(features);
         }
 
-        // Yeni özellik ekle (DTO ile)
-        [HttpPost]
+
+        // Tek özellik getir (b_plaka + feature_name)
+
+
+        
+        
+        [HttpPost("postBusFeature")]
         public IActionResult Add([FromBody] BusFeatureDto dto)
         {
             var bus = _context.Buses.Find(dto.b_plaka);
@@ -68,8 +61,8 @@ namespace OtobusBiletiApp.Controllers
             return Ok(dto);
         }
 
-        // Güncelle (pek yapılmaz ama örnek)
-        [HttpPut("{plaka}/{feature}")]
+        // Güncelle 
+        [HttpPut("putBusFeature/{plaka}/{feature}")]
         public IActionResult Update(string plaka, string feature, [FromBody] BusFeatureDto updated)
         {
             var item = _context.BusFeatures.FirstOrDefault(f => f.b_plaka == plaka && f.feature_name == feature);
@@ -84,7 +77,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Özellik sil
-        [HttpDelete("{plaka}/{feature}")]
+        
+        [HttpDelete("deleteBusFeature/{plaka}/{feature}")]
         public IActionResult Delete(string plaka, string feature)
         {
             var item = _context.BusFeatures.FirstOrDefault(f => f.b_plaka == plaka && f.feature_name == feature);

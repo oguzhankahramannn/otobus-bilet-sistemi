@@ -16,7 +16,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Tüm company_tel kayıtlarını getir (DTO ile)
-        [HttpGet]
+       
+        [HttpGet("getCompanyTel")]
         public IActionResult GetAll()
         {
             var tels = _context.CompanyTels
@@ -31,7 +32,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Tek kayıt getir (DTO ile)
-        [HttpGet("{id}")]
+        
+        [HttpGet("getCompanyTelByID/{id}")]
         public IActionResult Get(int id)
         {
             var tel = _context.CompanyTels
@@ -51,7 +53,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Yeni telefon ekle (DTO ile)
-        [HttpPost]
+        
+        [HttpPost("postCompanyTel")]
         public IActionResult Add([FromBody] CompanyTelDto dto)
         {
             var company = _context.Companies.FirstOrDefault(c => c.company_id == dto.company_id);
@@ -72,7 +75,8 @@ namespace OtobusBiletiApp.Controllers
         }
 
         // Güncelle (DTO ile)
-        [HttpPut("{id}")]
+    
+        [HttpPut("putCompanyById/{id}")]
         public IActionResult Update(int id, [FromBody] CompanyTelDto updated)
         {
             var tel = _context.CompanyTels.FirstOrDefault(t => t.id == id);
@@ -86,8 +90,9 @@ namespace OtobusBiletiApp.Controllers
             return Ok(updated);
         }
 
-        // Sil
-        [HttpDelete("{id}")]
+        
+        
+        [HttpDelete("deleteCompanyTelbyId/{id}")]
         public IActionResult Delete(int id)
         {
             var tel = _context.CompanyTels.FirstOrDefault(t => t.id == id);

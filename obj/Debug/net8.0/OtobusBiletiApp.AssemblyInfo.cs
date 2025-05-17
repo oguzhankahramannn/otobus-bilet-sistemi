@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OtobusBiletiApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1e517394ed4868619b6b76438a8ce70a8ad5753f")]
 [assembly: System.Reflection.AssemblyProductAttribute("OtobusBiletiApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OtobusBiletiApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -19,10 +19,12 @@ namespace OtobusBiletiApp.Controllers
         public async Task<IActionResult> Login(LoginUser loginUser)
         {
             var result = await _authService.Login(loginUser);
-            if (result.Id != 0)
-                return Ok(result);
 
-            return Unauthorized("Kullanıcı adı veya şifre yanlış.");
+            if (result == null)
+                return BadRequest("Kullanıcı adı veya şifre yanlış"); // veya Unauthorized()
+
+            return Ok(result); // ✅ token'ı döner
         }
+
     }
 }
